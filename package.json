@@ -1,0 +1,29 @@
+{
+  "name": "qizzok-dot-com",
+  "description": "Serve www.qizzok.com through express in Node.js or through serverless-express via AWS lambda",
+  "main": "app.js",
+  "dependencies": {
+    "@vendia/serverless-express": "^4.10.4",
+    "express": "^4.18.2",
+    "hbs": "^4.2.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.19.6",
+    "rimraf": "^5.0.5"
+  },
+  "scripts": {
+    "test": "node src/local.js",
+    "build": "rimraf ./dist && esbuild ./src/lambda.js --entry-names=[dir]/[name]/index --bundle --minify --platform=node --target=node16.14 --outdir=dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Qizzok/qizzok-dot-com.git"
+  },
+  "author": "Qizzok",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/Qizzok/qizzok-dot-com/issues"
+  },
+  "homepage": "https://qizzok.com",
+  "private": true
+}
