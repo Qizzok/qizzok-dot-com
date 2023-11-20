@@ -1,0 +1,38 @@
+name: Deploy main branch
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  deploy:
+    name: Deploy lambda function
+    runs-on: [ ubuntu-latest ]
+    steps:
+      - name: Get latest source
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+
+      - name: Run npm install
+        run: npm install
+
+      - name: Bundle Lambda app
+        run: npm run build
+
+      - name: Zip lambda function
+        run: zip -r9 lambda.zip ./dist/lambda
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Deploy to AWS
+        run: aws lambda update-function-code --dry-run --function-name ${{ secrets.AWS_WWW_LAMBDA }} --zip-file fileb://lambda.zip
